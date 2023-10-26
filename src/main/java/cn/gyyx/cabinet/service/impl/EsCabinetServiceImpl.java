@@ -3,13 +3,18 @@ package cn.gyyx.cabinet.service.impl;
 import cn.gyyx.cabinet.domain.EsCabinet;
 import cn.gyyx.cabinet.mapper.CabinetMapper;
 import cn.gyyx.cabinet.pojo.Cabinet;
+import cn.gyyx.cabinet.pojo.CabinetVo;
 import cn.gyyx.cabinet.repository.EsCabinetRepository;
 import cn.gyyx.cabinet.service.EsCabinetService;
+import com.fasterxml.jackson.databind.util.BeanUtil;
 import org.elasticsearch.common.geo.GeoPoint;
 import org.elasticsearch.common.unit.DistanceUnit;
 import org.elasticsearch.index.query.GeoDistanceQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.sort.SortBuilders;
+import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -22,6 +27,8 @@ import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilde
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -97,7 +104,7 @@ public class EsCabinetServiceImpl implements EsCabinetService {
     }
 
     @Override
-    public Page<EsCabinet> search(String lat, String lon, Integer distance, String disUnit, Integer pageNum, Integer pageSize) {
+    public Page<CabinetVo> search(String lat, String lon, Integer distance, String disUnit, Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
         NativeSearchQueryBuilder nativeSearchQueryBuilder = new NativeSearchQueryBuilder();
         //分页
@@ -112,14 +119,30 @@ public class EsCabinetServiceImpl implements EsCabinetService {
                 distanceQueryBuilder.distance(distance+disUnit);
             }
             nativeSearchQueryBuilder.withFilter(distanceQueryBuilder);
+            nativeSearchQueryBuilder.withSort(SortBuilders.geoDistanceSort("location",geoPoint).unit(DistanceUnit.KILOMETERS).order(SortOrder.ASC));
         }
+
         NativeSearchQuery searchQuery = nativeSearchQueryBuilder.build();
+
         SearchHits<EsCabinet> searchHits = elasticsearchRestTemplate.search(searchQuery, EsCabinet.class);
         if (searchHits.getTotalHits()<=0){
             return new PageImpl<>(Collections.emptyList(),pageable,0);
         }
-        List<EsCabinet> searchCabinet = searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
-        return new PageImpl<>(searchCabinet,pageable,searchHits.getTotalHits());
+
+        List<CabinetVo> cabinetVoList = new ArrayList<>();
+        searchHits.getSearchHits().forEach(item->{
+            EsCabinet content = item.getContent();
+            CabinetVo cabinetVo = new CabinetVo();
+            BeanUtils.copyProperties(content,cabinetVo);
+            List<Object> sortValues = item.getSortValues();
+            BigDecimal pointDistance = new BigDecimal(sortValues.get(0).toString()).setScale(2, RoundingMode.HALF_UP);
+            cabinetVo.setDistance(pointDistance);
+            cabinetVoList.add(cabinetVo);
+        });
+
+
+        //List<EsCabinet> searchCabinet = searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
+        return new PageImpl<>(cabinetVoList,pageable,searchHits.getTotalHits());
     }
 
 }

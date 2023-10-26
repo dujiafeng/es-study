@@ -1,12 +1,15 @@
 package cn.gyyx.cabinet.domain;
 
+
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
+
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 /**
  * @author feng
@@ -32,21 +35,24 @@ public class EsCabinet implements Serializable {
     @Field(type = FieldType.Keyword)
     private String province;
     @Field(type = FieldType.Keyword)
-    private String citycode;
+    private String cityCode;
     @Field(type = FieldType.Keyword)
     private String city;
     @Field(type = FieldType.Keyword)
-    private String adcode;
+    private String adCode;
     @Field(type = FieldType.Keyword)
     private String district;
     @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private String address;
     private Integer sts;
-    @Field(type = FieldType.Date,format=DateFormat.custom,pattern="yyyy-MM-dd HH:mm:ss")
-    private Date cTime;
-    @Field(type = FieldType.Date,format=DateFormat.custom,pattern="yyyy-MM-dd HH:mm:ss")
-    private Date uTime;
-    private Integer ischanged;
+
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
+    private LocalDateTime cTime;
+
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
+    private LocalDateTime uTime;
+
+    private Integer isChanged;
     private String stationId;
     private Integer h3level;
     private Integer capacity;
@@ -60,6 +66,7 @@ public class EsCabinet implements Serializable {
     private Integer valid72;
     private Integer charging72;
     private Integer invalid72;
-    @Field(type = FieldType.Date,format=DateFormat.custom,pattern="yyyy-MM-dd HH:mm:ss")
-    private Date btime;
+
+    @Field(type = FieldType.Date, format = DateFormat.date_hour_minute_second)
+    private LocalDateTime  bTime;
 }

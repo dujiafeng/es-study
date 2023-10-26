@@ -1,6 +1,7 @@
 package cn.gyyx.cabinet;
 
 import cn.gyyx.cabinet.domain.EsCabinet;
+import cn.gyyx.cabinet.pojo.CabinetVo;
 import cn.gyyx.cabinet.service.EsCabinetService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -33,7 +34,7 @@ public class MyTest {
 
     @Test
     public void search(){
-        Page<EsCabinet> cabinetPage = esCabinetService.search("40.159866", "116.297043", 1, "km", 1, 10);
+        Page<CabinetVo> cabinetPage = esCabinetService.search("40.159866", "116.297043", 5, "km", 0, 100);
         log.info("success...");
         System.out.println(cabinetPage);
     }

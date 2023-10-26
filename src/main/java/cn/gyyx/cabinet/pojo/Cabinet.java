@@ -8,6 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -32,8 +33,8 @@ public class Cabinet {
     private String district;
     private String address;
     private int sts;
-    private Date ctime;
-    private Date utime;
+    private LocalDateTime ctime;
+    private LocalDateTime utime;
     private int ischanged;
     private String stationid;
     private int h3level;
@@ -48,7 +49,7 @@ public class Cabinet {
     private int valid72;
     private int charging72;
     private int invalid72;
-    private Date btime;
+    private LocalDateTime btime;
 
 
     public EsCabinet toEsCabinet(){
@@ -67,15 +68,15 @@ public class Cabinet {
             esCabinet.setLocation_gcj02(geoPoint);
         }
         esCabinet.setProvince(province);
-        esCabinet.setCitycode(citycode);
+        esCabinet.setCityCode(citycode);
         esCabinet.setCity(city);
-        esCabinet.setAdcode(adcode);
+        esCabinet.setAdCode(adcode);
         esCabinet.setDistrict(district);
         esCabinet.setAddress(address);
         esCabinet.setSts(sts);
         esCabinet.setCTime(ctime);
         esCabinet.setUTime(utime);
-        esCabinet.setIschanged(ischanged);
+        esCabinet.setIsChanged(ischanged);
         esCabinet.setStationId(stationid);
         esCabinet.setH3level(h3level);
         esCabinet.setCapacity(capacity);
@@ -89,7 +90,7 @@ public class Cabinet {
         esCabinet.setValid72(valid72);
         esCabinet.setCharging72(charging72);
         esCabinet.setInvalid72(invalid72);
-        esCabinet.setBtime(btime);
+        esCabinet.setBTime(btime);
         return esCabinet;
 
     }

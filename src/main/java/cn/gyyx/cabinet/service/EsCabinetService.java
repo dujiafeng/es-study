@@ -1,6 +1,7 @@
 package cn.gyyx.cabinet.service;
 
 import cn.gyyx.cabinet.domain.EsCabinet;
+import cn.gyyx.cabinet.pojo.CabinetVo;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -26,5 +27,5 @@ public interface EsCabinetService {
     Page<EsCabinet> search(String keyword, Integer pageNum, Integer pageSize);
 
 
-    Page<EsCabinet> search(String lat, String lon, Integer distance, String disUnit, Integer pageNum, Integer pageSize);
+    Page<CabinetVo> search(String lat, String lon, Integer distance, String disUnit, Integer pageNum, Integer pageSize);
 }
