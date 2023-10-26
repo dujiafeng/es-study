@@ -1,6 +1,8 @@
 package cn.gyyx.cabinet.repository;
 
 import cn.gyyx.cabinet.domain.EsCabinet;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 
 /**
@@ -10,4 +12,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
  * @description:
  */
 public interface EsCabinetRepository extends ElasticsearchRepository<EsCabinet, Long> {
+
+    Page<EsCabinet> findByAddress(String keyword, String keyword1, String keyword2, Pageable pageable);
+
 }
