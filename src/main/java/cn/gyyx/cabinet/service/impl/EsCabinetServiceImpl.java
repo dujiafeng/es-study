@@ -41,7 +41,6 @@ public class EsCabinetServiceImpl implements EsCabinetService {
 
     private final ElasticsearchRestTemplate elasticsearchRestTemplate;
 
-
     public EsCabinetServiceImpl(EsCabinetRepository cabinetRepository, CabinetMapper cabinetMapper, ElasticsearchRestTemplate elasticsearchRestTemplate) {
         this.cabinetRepository = cabinetRepository;
         this.cabinetMapper = cabinetMapper;
@@ -97,7 +96,6 @@ public class EsCabinetServiceImpl implements EsCabinetService {
         return cabinetRepository.findByAddress(keyword, keyword, keyword, pageable);
     }
 
-
     @Override
     public Page<EsCabinet> search(String lat, String lon, Integer distance, String disUnit, Integer pageNum, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNum, pageSize);
@@ -123,6 +121,5 @@ public class EsCabinetServiceImpl implements EsCabinetService {
         List<EsCabinet> searchCabinet = searchHits.stream().map(SearchHit::getContent).collect(Collectors.toList());
         return new PageImpl<>(searchCabinet,pageable,searchHits.getTotalHits());
     }
-
 
 }

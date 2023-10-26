@@ -1,9 +1,11 @@
 package cn.gyyx.cabinet;
 
+import cn.gyyx.cabinet.domain.EsCabinet;
 import cn.gyyx.cabinet.service.EsCabinetService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +29,13 @@ public class MyTest {
     public void all(){
         int count = esCabinetService.importAll();
         log.info("count:{}",count);
+    }
+
+    @Test
+    public void search(){
+        Page<EsCabinet> cabinetPage = esCabinetService.search("40.159866", "116.297043", 1, "km", 1, 10);
+        log.info("success...");
+        System.out.println(cabinetPage);
     }
 
 
